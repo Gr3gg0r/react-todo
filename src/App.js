@@ -3,15 +3,19 @@ import "./App.css";
 const items = [
   {
     title: "shahfiq",
+    completed:    false,
   },
   {
     title: "Syima",
+    completed:    true,
   },
   {
     title: "Aliah",
+    completed:    false,
   },
   {
     title: "Ajam",
+    completed:    false,
   },
 ];
 
@@ -21,11 +25,11 @@ function removeItem(index) {
 
 const listItem = items.map((item, index) => {
   return (
-    <li key={index}>
+    <li key={index} className={item.completed ? "completed" : ""}>
       <div class="view">
-        <input class="toggle" type="checkbox" />
+        <input class="toggle" type="checkbox" checked={item.completed} />
         <label>{item.title}</label>
-        <button class="destroy" onClick={()  =>  removeItem(index)}></button>
+        <button class="destroy" onClick={() => removeItem(index)}></button>
       </div>
     </li>
   );
