@@ -1,11 +1,11 @@
-const name = "Shahfiq Shah";
+import react from "react";
 
-function Name() {
-  return (
+class Name extends react.Component {
+  render() {
     <div className="Name">
-      <h1>{name}</h1>
-    </div>
-  );
+      <h1>{this.props.name}</h1>
+    </div>;
+  }
 }
 
 export default Name;
