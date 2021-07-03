@@ -2,6 +2,7 @@ import "./App.css";
 import React from "react";
 import Header from "./Component/Header";
 import Footer from "./Component/Footer";
+import Section from "./Component/Section";
 import ListItem from "./Component/ListItem";
 
 class App extends React.Component {
@@ -113,12 +114,12 @@ class App extends React.Component {
 
   /**
    * Check all task to comple
-   * @param {Event} event
+   * @param {bool} checked
    */
-  checkAll(event) {
+  checkAll(checked) {
     const items = this.state.items;
     const checkItems = items.map((item) => {
-      return { title: item.title, completed: event.target.checked };
+      return { title: item.title, completed: checked };
     });
     this.setState({
       items: checkItems,
@@ -146,21 +147,14 @@ class App extends React.Component {
     return (
       <div className="todoapp">
         <Header todoSubmit={(value) => this.todoSubmit(value)} />
-        <section className="main">
-          <input
-            id="toggle-all"
-            className="toggle-all"
-            type="checkbox"
-            onChange={this.checkAll}
-          />
-          <label htmlFor="toggle-all">Mark all as complete</label>
-
-          <ul className="todo-list">{listItems}</ul>
-        </section>
+        <Section checkAll={(checked) => this.checkAll(checked)}>
+          {listItems}
+        </Section>
         <Footer
           status={this.state.status}
           items={this.state.items}
           filter={(status) => this.filter(status)}
+          clearCompleted={() => this.clearCompleted()}
         />
       </div>
     );

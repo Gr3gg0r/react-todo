@@ -1,9 +1,11 @@
-import React from "react";
-
 function Footer(props) {
   function handleClick(event, status) {
     event.preventDefault();
     props.filter(status);
+  }
+
+  function handleButton() {
+    props.clearCompleted();
   }
 
   return (
@@ -41,10 +43,7 @@ function Footer(props) {
           </a>
         </li>
       </ul>
-      <button
-        className="clear-completed"
-        onClick={() => props.clearCompleted()}
-      >
+      <button className="clear-completed" onClick={() => handleButton()}>
         Clear completed
       </button>
     </footer>
