@@ -81,7 +81,7 @@ class App extends React.Component {
 
   /**
    * Submit todo form.
-   * @param {Object} value the dom event
+   * @param {Object} value the updated object
    */
   todoSubmit(value) {
     this.setState({
@@ -127,27 +127,28 @@ class App extends React.Component {
   }
 
   render() {
-    const listItems = this.state.items
-      .filter(
-        (item) =>
-          item.completed === this.state.filteredItems || this.state.filterAll
-      )
-      .map((item, key) => {
-        return (
-          <ListItem
-            id={key}
-            item={item}
-            checkComplete={(checked, id) => this.checkComplete(checked, id)}
-            removeItem={(id) => this.removeItem(id)}
-          />
-        );
-      });
-
     return (
       <div className="todoapp">
         <Header todoSubmit={(value) => this.todoSubmit(value)} />
         <Section checkAll={(checked) => this.checkAll(checked)}>
-          {listItems}
+          {this.state.items
+            .filter(
+              (item) =>
+                item.completed === this.state.filteredItems ||
+                this.state.filterAll
+            )
+            .map((item, key) => {
+              return (
+                <ListItem
+                  id={key}
+                  item={item}
+                  checkComplete={(checked, id) =>
+                    this.checkComplete(checked, id)
+                  }
+                  removeItem={(id) => this.removeItem(id)}
+                />
+              );
+            })}
         </Section>
         <Footer
           status={this.state.status}
