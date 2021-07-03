@@ -1,5 +1,7 @@
 import "./App.css";
 import React from "react";
+import Header from "./Component/Header";
+import Footer from "./Component/Footer";
 import ListItem from "./Component/ListItem";
 
 class App extends React.Component {
@@ -13,8 +15,8 @@ class App extends React.Component {
           completed: false,
         },
       ],
-      filterItems: [],
-      enterTodo: "",
+      filteredItems: true,
+      filterAll: true,
       status: "all",
     };
 
@@ -23,12 +25,6 @@ class App extends React.Component {
     this.checkComplete = this.checkComplete.bind(this);
     this.filter = this.filter.bind(this);
     this.checkAll = this.checkAll.bind(this);
-  }
-
-  componentDidMount() {
-    this.setState({
-      filterItems: this.state.items,
-    });
   }
 
   removeItem(key) {
@@ -58,45 +54,38 @@ class App extends React.Component {
     });
     this.setState({
       items: clearCompleteItems,
-      filterItems: clearCompleteItems,
     });
   }
 
   /**
+   * Filter the status of the todo item.
    *
-   *
-   * @param {Event} event Javascript event
    * @param {string} status filter by status
    */
-  filter(event, status) {
-    const items = this.state.items;
-    const filterItems = items.filter((item) => {
-      if (status === "completed") {
-        return item.completed === true;
-      } else if (status === "active") {
-        return item.completed === false;
-      } else {
-        return true;
-      }
+  filter(status) {
+    let filterItems = true;
+    let allItems = false;
+    if (status === "completed") {
+      filterItems = true;
+    } else if (status === "active") {
+      filterItems = false;
+    } else {
+      allItems = true;
+    }
+    this.setState({
+      status: status,
+      filteredItems: filterItems,
+      filterAll: allItems,
     });
-    event.preventDefault();
-    this.setState({ status: status, filterItems: filterItems });
   }
 
   /**
-   * Submit todo form
-   * @param event the dom event
+   * Submit todo form.
+   * @param {Object} value the dom event
    */
-  todoSubmit(event) {
-    event.preventDefault();
-    const value = {
-      title: this.state.enterTodo,
-      completed: false,
-    };
+  todoSubmit(value) {
     this.setState({
       items: this.state.items.concat([value]),
-      filterItems: this.state.items.concat([value]),
-      enterTodo: "",
     });
   }
 
@@ -119,7 +108,6 @@ class App extends React.Component {
     items[key].completed = checked;
     this.setState({
       items: items,
-      filterItems: items,
     });
   }
 
@@ -139,31 +127,25 @@ class App extends React.Component {
   }
 
   render() {
-    const listItem = this.state.items.map((item, key) => {
-      return (
-        <ListItem
-          id={key}
-          item={item}
-          checkComplete={(checked, id) => this.checkComplete(checked, id)}
-          removeItem={(id) => this.removeItem(id)}
-        />
-      );
-    });
+    const listItems = this.state.items
+      .filter(
+        (item) =>
+          item.completed === this.state.filteredItems || this.state.filterAll
+      )
+      .map((item, key) => {
+        return (
+          <ListItem
+            id={key}
+            item={item}
+            checkComplete={(checked, id) => this.checkComplete(checked, id)}
+            removeItem={(id) => this.removeItem(id)}
+          />
+        );
+      });
 
     return (
       <div className="todoapp">
-        <header className="header">
-          <h1>todos</h1>
-          <form onSubmit={this.todoSubmit}>
-            <input
-              className="new-todo"
-              placeholder="What needs to be done?"
-              autoFocus
-              value={this.state.enterTodo}
-              onChange={this.todoChange}
-            />
-          </form>
-        </header>
+        <Header todoSubmit={(value) => this.todoSubmit(value)} />
         <section className="main">
           <input
             id="toggle-all"
@@ -173,51 +155,13 @@ class App extends React.Component {
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
 
-          <ul className="todo-list">
-            {listItem}
-            {/** The list append here */}
-          </ul>
-          <footer className="footer">
-            <span className="todo-count">2 Items Left</span>
-            <ul className="filters">
-              <li>
-                <a
-                  href="#/"
-                  className={this.state.status === "all" ? "selected" : ""}
-                  onClick={(e) => this.filter(e, "all")}
-                >
-                  All
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#/"
-                  className={this.state.status === "active" ? "" : ""}
-                  onClick={(e) => this.filter(e, "active")}
-                >
-                  Active
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#/"
-                  className={
-                    this.state.status === "completed" ? "selected" : ""
-                  }
-                  onClick={(e) => this.filter(e, "completed")}
-                >
-                  Completed
-                </a>
-              </li>
-            </ul>
-            <button
-              className="clear-completed"
-              onClick={() => this.clearCompleted()}
-            >
-              Clear completed
-            </button>
-          </footer>
+          <ul className="todo-list">{listItems}</ul>
         </section>
+        <Footer
+          status={this.state.status}
+          items={this.state.items}
+          filter={(status) => this.filter(status)}
+        />
       </div>
     );
   }
