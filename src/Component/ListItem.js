@@ -59,13 +59,11 @@ class ListItem extends React.Component {
   }
 
   render() {
+    const completed = this.props.item.completed ? "completed" : "";
+    const editing = this.state.edit ? "editing" : "";
+
     return (
-      <li
-        className={
-          (this.props.item.completed ? "completed" : "",
-          this.state.edit ? "editing" : "")
-        }
-      >
+      <li className={`${completed} ${editing}`}>
         <div className="view">
           <input
             className="toggle"
