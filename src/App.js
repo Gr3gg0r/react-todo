@@ -26,6 +26,7 @@ class App extends React.Component {
     this.checkComplete = this.checkComplete.bind(this);
     this.filter = this.filter.bind(this);
     this.checkAll = this.checkAll.bind(this);
+    this.updateTodo = this.updateTodo.bind(this);
   }
 
   removeItem(key) {
@@ -97,6 +98,14 @@ class App extends React.Component {
     this.setState({ enterTodo: event.target.value });
   }
 
+  updateTodo(value, id) {
+    const items = this.state.items;
+    items[id].title = value;
+    this.setState({
+      items: items,
+    });
+  }
+
   /**
    * Handle the todo check box.
    *
@@ -140,12 +149,14 @@ class App extends React.Component {
             .map((item, key) => {
               return (
                 <ListItem
+                  key={key}
                   id={key}
                   item={item}
                   checkComplete={(checked, id) =>
                     this.checkComplete(checked, id)
                   }
                   removeItem={(id) => this.removeItem(id)}
+                  updateTodo={(value) => this.updateTodo(value, key)}
                 />
               );
             })}
