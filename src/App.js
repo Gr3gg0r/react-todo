@@ -33,7 +33,6 @@ class App extends React.Component {
     const new_items = items.filter((item, index) => index !== key);
     this.setState({
       items: new_items,
-      filterItems: new_items,
     });
   }
 
