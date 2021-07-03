@@ -1,5 +1,7 @@
+
 import "./App.css";
 import React from "react";
+import ListItem from "./Component/ListItem";
 
 class App extends React.Component {
   constructor(props) {
@@ -8,19 +10,7 @@ class App extends React.Component {
     this.state = {
       items: [
         {
-          title: "shahfiq",
-          completed: false,
-        },
-        {
-          title: "Syima",
-          completed: true,
-        },
-        {
-          title: "Aliah",
-          completed: false,
-        },
-        {
-          title: "Ajam",
+          title: "First Task",
           completed: false,
         },
       ],
@@ -122,12 +112,12 @@ class App extends React.Component {
   /**
    * Handle the todo check box.
    *
-   * @param {Event} event
+   * @param {bool} checked
    * @param {number} key
    */
-  checkComplete(event, key) {
+  checkComplete(checked, key) {
     const items = this.state.items;
-    items[key].completed = event.target.checked;
+    items[key].completed = checked;
     this.setState({
       items: items,
       filterItems:items,
@@ -149,23 +139,9 @@ class App extends React.Component {
 
   render() {
 
-    const listItem = this.state.filterItems.map((item, key) => {
+    const listItem = this.state.items.map((item, key) => {
       return (
-        <li key={key} className={item.completed ? "completed" : ""}>
-          <div className="view">
-            <input
-              className="toggle"
-              type="checkbox"
-              checked={item.completed}
-              onChange={(e) => this.checkComplete(e, key)}
-            />
-            <label>{item.title}</label>
-            <button
-              className="destroy"
-              onClick={() => this.removeItem(key)}
-            ></button>
-          </div>
-        </li>
+        <ListItem id={key} item={item} checkComplete={(checked,id) => this.checkComplete(checked,id)} removeItem={(id)=>this.removeItem(id)}/>
       );
     });
 
