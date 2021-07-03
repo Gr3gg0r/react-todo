@@ -1,4 +1,3 @@
-
 import "./App.css";
 import React from "react";
 import ListItem from "./Component/ListItem";
@@ -14,7 +13,7 @@ class App extends React.Component {
           completed: false,
         },
       ],
-      filterItems:[],
+      filterItems: [],
       enterTodo: "",
       status: "all",
     };
@@ -28,8 +27,8 @@ class App extends React.Component {
 
   componentDidMount() {
     this.setState({
-      filterItems: this.state.items
-    })
+      filterItems: this.state.items,
+    });
   }
 
   removeItem(key) {
@@ -54,13 +53,13 @@ class App extends React.Component {
 
   clearCompleted() {
     const items = this.state.items;
-    const clearCompleteItems = items.filter((item)=>{
-        return item.completed === false;     
-    })
+    const clearCompleteItems = items.filter((item) => {
+      return item.completed === false;
+    });
     this.setState({
-      items:clearCompleteItems,
-      filterItems:clearCompleteItems,
-    })
+      items: clearCompleteItems,
+      filterItems: clearCompleteItems,
+    });
   }
 
   /**
@@ -71,17 +70,17 @@ class App extends React.Component {
    */
   filter(event, status) {
     const items = this.state.items;
-    const filterItems = items.filter((item)=>{
-      if(status==='completed') {
+    const filterItems = items.filter((item) => {
+      if (status === "completed") {
         return item.completed === true;
-      } else if (status==='active'){
+      } else if (status === "active") {
         return item.completed === false;
       } else {
         return true;
       }
-    })
+    });
     event.preventDefault();
-    this.setState({status:status,filterItems:filterItems});
+    this.setState({ status: status, filterItems: filterItems });
   }
 
   /**
@@ -120,28 +119,34 @@ class App extends React.Component {
     items[key].completed = checked;
     this.setState({
       items: items,
-      filterItems:items,
+      filterItems: items,
     });
   }
-  
+
   /**
    * Check all task to comple
-   * @param {Event} event 
+   * @param {Event} event
    */
   checkAll(event) {
     const items = this.state.items;
-    const checkItems = items.map(item=>{return {title:item.title,completed:event.target.checked}});
+    const checkItems = items.map((item) => {
+      return { title: item.title, completed: event.target.checked };
+    });
     this.setState({
-      items:checkItems,
-      filterItems:checkItems,
-    })
+      items: checkItems,
+      filterItems: checkItems,
+    });
   }
 
   render() {
-
     const listItem = this.state.items.map((item, key) => {
       return (
-        <ListItem id={key} item={item} checkComplete={(checked,id) => this.checkComplete(checked,id)} removeItem={(id)=>this.removeItem(id)}/>
+        <ListItem
+          id={key}
+          item={item}
+          checkComplete={(checked, id) => this.checkComplete(checked, id)}
+          removeItem={(id) => this.removeItem(id)}
+        />
       );
     });
 
@@ -160,7 +165,12 @@ class App extends React.Component {
           </form>
         </header>
         <section className="main">
-          <input id="toggle-all" className="toggle-all" type="checkbox" onChange={this.checkAll}/>
+          <input
+            id="toggle-all"
+            className="toggle-all"
+            type="checkbox"
+            onChange={this.checkAll}
+          />
           <label htmlFor="toggle-all">Mark all as complete</label>
 
           <ul className="todo-list">
@@ -191,14 +201,21 @@ class App extends React.Component {
               <li>
                 <a
                   href="#/"
-                  className={this.state.status === "completed" ? "selected" : ""}
+                  className={
+                    this.state.status === "completed" ? "selected" : ""
+                  }
                   onClick={(e) => this.filter(e, "completed")}
                 >
                   Completed
                 </a>
               </li>
             </ul>
-            <button className="clear-completed" onClick={()=>this.clearCompleted()}>Clear completed</button>
+            <button
+              className="clear-completed"
+              onClick={() => this.clearCompleted()}
+            >
+              Clear completed
+            </button>
           </footer>
         </section>
       </div>
